@@ -14,9 +14,9 @@ if [ -z "$COMMAND" ]; then
     exit 1
 fi
 
-# CUDA 버전 확인 (nvidia-smi 사용)
+# Check CUDA version (using nvidia-smi)
 cuda_version=$(nvidia-smi | grep -oP "CUDA Version: \K[0-9]+")
-# 도커 이미지 선택
+# Select Docker image
 if [ "$cuda_version" -eq 12 ]; then
     docker_image="multigame"
 elif [ "$cuda_version" -eq 11 ]; then
@@ -26,16 +26,16 @@ else
     exit 1
 fi
 
-# 로그 디렉토리 설정
+# Set log directories
 mkdir -p output_logs error_logs
 timestamp=$(date +"%Y%m%d_%H%M%S")
 log_file="output_logs/output_${timestamp}.log"
 error_log_file="error_logs/error_${timestamp}.log"
 
-# GPU 선택 로직
+# GPU selection logic
 echo "Searching for available GPU..."
 
-# `nvidia-smi`로 GPU 메모리 사용량 확인
+# Check GPU memory usage via nvidia-smi
 gpu_info=$(nvidia-smi --query-gpu=index,name,memory.total,memory.used,memory.free --format=csv,noheader,nounits)
 available_gpu=$(echo "$gpu_info" | awk -F, '{if ($5 > 0) print $1 " " $5}' | sort -k2 -nr | head -n1 | cut -d' ' -f1)
 
@@ -49,14 +49,14 @@ if [ -z "$available_gpu" ]; then
     exit 1
 fi
 
-# 선택된 GPU 상세 정보 가져오기
+# Get detailed info for the selected GPU
 selected_gpu_info=$(echo "$gpu_info" | awk -v gpu_id="$available_gpu" -F, '{if ($1 == gpu_id) print}')
 selected_gpu_name=$(echo "$selected_gpu_info" | cut -d, -f2)
 selected_gpu_total_mem=$(echo "$selected_gpu_info" | cut -d, -f3)
 selected_gpu_used_mem=$(echo "$selected_gpu_info" | cut -d, -f4)
 selected_gpu_free_mem=$(echo "$selected_gpu_info" | cut -d, -f5)
 
-# 선택된 GPU 출력
+# Print selected GPU info
 echo "Selected GPU: $available_gpu (GPU Number: $available_gpu)" | tee -a "$log_file"
 echo "GPU Details:" | tee -a "$log_file"
 echo "  GPU ID: $available_gpu" | tee -a "$log_file"
@@ -66,7 +66,7 @@ echo "  Used Memory: ${selected_gpu_used_mem}MiB" | tee -a "$log_file"
 echo "  Free Memory: ${selected_gpu_free_mem}MiB" | tee -a "$log_file"
 
 
-# 컨테이너 이름 생성 (GPU 번호 + 날짜)
+# Generate container name (GPU number + date)
 date_str=$(date +"%Y%m%d%H%M%S")
 container_name="multigame_gpu${available_gpu}_${date_str}"
 
@@ -77,10 +77,10 @@ echo "Output Log File: $log_file"
 root_args=("traj_path")
 
 for arg in "$@"; do
-    # 인자의 이름과 값을 '='로 분리
+    # Split argument name and value by '='
     key=$(echo "$arg" | cut -d '=' -f 1)
 
-    # 제외할 인자가 아닌 경우에만 처리
+    # Process only non-excluded arguments
     for root_arg in "${root_args[@]}"; do
         if [[ "$key" == "root_arg" ]]; then
             user_param="-u $(id -u):$(id -g)"
@@ -112,12 +112,12 @@ docker_command="docker run --rm -it
 echo "Executing Docker command:" | tee -a "$log_file"
 echo "$docker_command" | tee -a "$log_file"
 
-# Docker 명령 실행 및 로그 기록
+# Run Docker command and record logs
 {
     eval $docker_command
 } 2>&1 | tee -a "$log_file"
 
-# 실행 결과 확인
+# Check execution result
 exit_code=$?
 if [ $exit_code -ne 0 ]; then
     echo "Execution failed. Check logs for details." | tee -a "$error_log_file"

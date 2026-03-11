@@ -115,7 +115,7 @@ def run_textblend_evaluation(
         )
         
         # ------------------------------------------------
-        # similarity 계산
+        # Compute similarity
         # ------------------------------------------------
         sim_ac = F.cosine_similarity(ta_embed, tc_embed, dim=0).item()
         sim_bc = F.cosine_similarity(tb_embed, tc_embed, dim=0).item()

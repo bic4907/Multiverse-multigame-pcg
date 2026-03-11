@@ -86,11 +86,11 @@ class CLIPTrainer(BaseTrainer):
             loss_t2i_total = 0.0
 
             for loss_module in self.loss_modules:
-                # mask 생성 
+                # Generate mask
                 if hasattr(loss_module, "get_mask"):
                     loss_module.get_mask(batch)
 
-                # loss 계산
+                # Compute loss
                 logit_i2t, logit_t2i = loss_module.loss(logits)
 
                 weight = self.loss_weights[loss_module.name]
@@ -136,11 +136,11 @@ class CLIPTrainer(BaseTrainer):
             loss_t2i_total = 0.0
 
             for loss_module in self.loss_modules:
-                # mask 생성 
+                # Generate mask
                 if hasattr(loss_module, "get_mask"):
                     loss_module.get_mask(batch)
 
-                # loss 계산
+                # Compute loss
                 logit_i2t, logit_t2i = loss_module.loss(logits)
 
                 weight = self.loss_weights[loss_module.name]

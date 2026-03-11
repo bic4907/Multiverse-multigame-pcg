@@ -145,7 +145,7 @@ def generate_texts(config, client):
     )
     os.makedirs(save_dir, exist_ok=True)
 
-    # ---- Blend pair 생성 ----
+    # ---- Generate blend pairs ----
     blend_pairs_path = os.path.join(save_dir, "blended_pairs.csv")
     df_pairs = make_blend_pairs(
         data_loader=val_loader,
@@ -153,7 +153,7 @@ def generate_texts(config, client):
         max_data_length=2009,
     )
     
-    # ---- Batch 요청 생성 ----
+    # ---- Create batch requests ----
     requests = create_batch_requests(df_pairs, config.openai_model)
 
     batch_file_path = os.path.join(save_dir, "blend_batch.jsonl")
@@ -164,7 +164,7 @@ def generate_texts(config, client):
 
     print(f"Saved {len(requests)} batch requests")
 
-    # ---- OpenAI 업로드 ----
+    # ---- Upload to OpenAI ----
     batch_file = client.files.create(
         file=open(batch_file_path, "rb"),
         purpose="batch"

@@ -64,7 +64,7 @@ class EMAVectorQuantizer(nn.Module):
         if self.training:
             onehot = F.one_hot(indices, self.num_codes).type_as(z)
 
-            # detach()를 통해 gradient graph에서 분리
+            # Detach from gradient graph via detach()
             self.cluster_size.mul_(self.decay).add_(
                 onehot.sum(0).detach(), alpha=1 - self.decay
             )

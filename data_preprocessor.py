@@ -66,31 +66,31 @@ def centering_and_padding(patch_np, window_size):
     if h > window_size or w > window_size:
         raise ValueError(f"Patch ({h},{w}) larger than window {window_size}")
 
-    # 1️window 생성
+    # 1. Create window
     window = np.zeros((window_size, window_size), dtype=patch_np.dtype)
 
-    # 2️중앙 위치 계산
+    # 2. Compute center position
     top = (window_size - h) // 2
     left = (window_size - w) // 2
     bottom = top + h
     right = left + w
 
-    # patch 덮어쓰기
+    # Overwrite patch into window
     window[top:bottom, left:right] = patch_np
 
-    # 위쪽 (row 0 복제)
+    # Top padding (replicate row 0)
     if top > 0:
         window[:top, left:right] = patch_np[0:1, :]
 
-    # 아래쪽 (row -1 복제)
+    # Bottom padding (replicate row -1)
     if bottom < window_size:
         window[bottom:, left:right] = patch_np[-1:, :]
 
-    # 왼쪽 (col 0 복제)
+    # Left padding (replicate col 0)
     if left > 0:
         window[:, :left] = window[:, left:left+1]
 
-    # 오른쪽 (col -1 복제)
+    # Right padding (replicate col -1)
     if right < window_size:
         window[:, right:] = window[:, right-1:right]
 

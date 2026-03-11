@@ -12,12 +12,12 @@ def upload_to_wandb(
     artifact_type: str = "evaluation_results",
 ):
     """
-    CSV 파일을 wandb에 업로드하는 함수 (자동으로 Table로도 로깅)
+    Uploads a CSV file to wandb (also automatically logs as a Table)
 
     Args:
-        artifact_name: wandb artifact 이름
-        save_path: CSV 파일 경로
-        artifact_type: artifact 타입 (기본값: "evaluation_results")
+        artifact_name: wandb artifact name
+        save_path: CSV file path
+        artifact_type: artifact type (default: "evaluation_results")
     """
     if not wandb.run:
         logger.warning("wandb run is not active. Skipping upload.")
@@ -26,14 +26,14 @@ def upload_to_wandb(
     if not os.path.exists(save_path):
         raise FileNotFoundError(f"File not found: {save_path}")
 
-    # CSV 파일이면 wandb.Table로 로깅
+    # If CSV, log as wandb.Table
     if save_path.endswith('.csv'):
         df = pd.read_csv(save_path)
         table = wandb.Table(dataframe=df)
         wandb.log({f"table/{artifact_name}": table})
         logger.info(f"Logged CSV as wandb.Table: table/{artifact_name}")
 
-    # Artifact로 업로드
+    # Upload as Artifact
     wandb.save(save_path)
     artifact = wandb.Artifact(
         name=artifact_name,

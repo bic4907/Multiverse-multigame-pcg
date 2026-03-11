@@ -62,7 +62,7 @@ def vq_stats_from_counts(
     """
     Args:
         counts: (num_codes,) long or float tensor
-                누적된 code usage count (epoch 단위 권장)
+                accumulated code usage count (recommended per epoch)
         prefix: wandb/log key prefix
     Returns:
         dict of scalar statistics
@@ -71,7 +71,7 @@ def vq_stats_from_counts(
     total = counts.sum()
 
     if total < eps:
-        # 안전장치: 아무 code도 안 쓰인 경우
+        # Safety guard: no codes used at all
         return {
             f"{prefix}/usage_entropy": 0.0,
             f"{prefix}/perplexity": 1.0,

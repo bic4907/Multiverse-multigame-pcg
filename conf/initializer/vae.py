@@ -37,7 +37,7 @@ def format_exp_fields(config, field_map):
 
         value = getattr(config, cfg_key)
 
-        # list / tuple은 보기 좋게
+        # Format list/tuple values for readability
         if isinstance(value, (list, tuple)):
             value = "-".join(map(str, value))
 

@@ -121,7 +121,7 @@ def train(config: TrainConfig, tsne_queue_in=None, tsne_queue_out=None):
                              vit_eval_freq=config.vit_eval_freq,
                              prefix="vae")
 
-    # DataFrame 수집을 위한 리스트
+    # Lists for collecting DataFrames
     all_single_dfs = []
     all_blended_dfs = []
 
@@ -175,7 +175,7 @@ def train(config: TrainConfig, tsne_queue_in=None, tsne_queue_out=None):
             df = vae_eval_metrics.extra['single_instruction_dataframe']
             df.to_csv(join(vae_log_dir, f"single_instruction.csv"), index=False)
 
-            # epoch 정보를 첫 번째 컬럼에 추가
+            # Prepend epoch info as the first column
             df_with_epoch = df.copy()
             df_with_epoch.insert(0, 'epoch', epoch + 1)
             all_single_dfs.append(df_with_epoch)
@@ -187,7 +187,7 @@ def train(config: TrainConfig, tsne_queue_in=None, tsne_queue_out=None):
             df = vae_eval_metrics.extra['blended_instruction_dataframe']
             df.to_csv(join(vae_log_dir, f"blended_instruction.csv"), index=False)
 
-            # epoch 정보를 첫 번째 컬럼에 추가
+            # Prepend epoch info as the first column
             df_with_epoch = df.copy()
             df_with_epoch.insert(0, 'epoch', epoch + 1)
             all_blended_dfs.append(df_with_epoch)
@@ -265,10 +265,10 @@ def train(config: TrainConfig, tsne_queue_in=None, tsne_queue_out=None):
         tsne_logger(queue_out=tsne_queue_out, wait=True)
 
     # =========================
-    # 최종 DataFrame 저장 및 업로드
+    # Save and upload final DataFrames
     # =========================
 
-    # Single instruction DataFrame 병합
+    # Merge single instruction DataFrames
     if all_single_dfs:
         combined_single_df = pd.concat(all_single_dfs, ignore_index=True)
         single_output_path = join(config.exp_path, "single_instruction.csv")
@@ -280,7 +280,7 @@ def train(config: TrainConfig, tsne_queue_in=None, tsne_queue_out=None):
             save_path=single_output_path,
         )
 
-    # Blended instruction DataFrame 병합
+    # Merge blended instruction DataFrames
     if all_blended_dfs:
         combined_blended_df = pd.concat(all_blended_dfs, ignore_index=True)
         blended_output_path = join(config.exp_path, "blended_instruction.csv")
