@@ -1,0 +1,11 @@
+defaults:
+  - _self_
+
+# - override hydra/launcher: basic
+# - override hydra/launcher: submitit_local
+  # - override hydra/launcher: submitit_slurm
+
+render_freq: -1
+
+hydra:
+  verbose: true
