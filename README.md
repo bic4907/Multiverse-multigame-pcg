@@ -1,22 +1,81 @@
-# Multi-Game PCGRL
-Multi-game Procedural Content Generation via Reinforcement Learning project
+# Multiverse: Language-Conditioned Multi-Game Level Generator
 
+![Teaser](images/teasure.png)
 
-## Environment Setup
+## 🌟 Overview
 
-### Build Docker Image
+> **Multiverse** is a **language-conditioned multi-game level generator** that enables both **multi-game level generation** and **cross-game level blending** through textual specifications.
+
+Key highlights:
+- 🎮 **Multi-game generation** — a single model covers multiple game domains
+- 🔀 **Cross-game level blending** — smoothly interpolate between games via latent space
+- 📝 **Language-guided control** — use text prompts to specify structural characteristics
+- 🔗 **Shared latent space** — aligns textual instructions and level structures across games
+- ✨ **Zero-shot compositional generation** — generate novel levels from compositional text prompts
+
+Unlike prior text-to-level generators limited to a single game domain, Multiverse learns a **shared representation** that captures structural relationships across game domains, enabling controllable blending through latent interpolation.
+
+---
+
+## 📦 Dataset
+
+The dataset consists of human-authored game levels collected from two sources:
+- **[VGLC](https://github.com/TheVGLC/TheVGLC) (Video Game Level Corpus)** — a public corpus of human-designed game levels across multiple game domains
+- **PCGRL environment** — human-authored levels used as training references
+
+| Game | Annotations |
+|---|--:|
+| 🍄 Super Mario Bros | 1,241 |
+| 🗡️ The Legend of Zelda | 1,837 |
+| 🏃 Lode Runner | 1,201 |
+| 🏰 Dungeon | 1,298 |
+| **Total** | **5,577** |
+
+The dataset is split into two archive parts due to GitHub file size limits. To set up the dataset, run:
 
 ```bash
-docker build -t bic4907/multigame .
+bash setup_dataset.sh
 ```
 
+This will reassemble and extract the dataset into the `dataset/` directory.
 
+```
+dataset/
+├── raw_levels/          # Original human-authored level files
+│   ├── super_mario_bros/
+│   ├── the_legend_of_zelda/
+│   ├── lode_runner/
+│   └── dungeon/
+├── processed_levels/    # Preprocessed level patches (.npy) with annotations
+│   ├── super_mario_bros/size_16/
+│   ├── the_legend_of_zelda/size_16/
+│   ├── lode_runner/size_16/
+│   └── dungeon/size_16/
+└── rendered_levels/     # Rendered level images
+    ├── super_mario_bros/size_16/
+    ├── the_legend_of_zelda/size_16/
+    ├── lode_runner/size_16/
+    └── dungeon/size_16/
+```
 
-## How to Run
+---
 
-### Using Docker
+## 🛠️ Environment Setup
 
-The `run_docker.sh` script automatically finds and allocates an available GPU, and creates container names in the format `multigame-pcgrl_gpu{GPU_NUMBER}_{DATE}`.
+### 🐳 Build Docker Image
+
+```bash
+docker build -t multigame .
+```
+
+---
+
+## 🚀 How to Run
+
+### 🐳 Using Docker
+
+The `run_docker.sh` script automatically finds and allocates an available GPU.  
+Container names follow the format: `multigame_gpu{GPU_NUMBER}_{DATETIME}`.
 
 #### Basic Usage
 
@@ -24,37 +83,46 @@ The `run_docker.sh` script automatically finds and allocates an available GPU, a
 ./run_docker.sh <command> [args...]
 ```
 
+#### 🔑 Weights & Biases Setup
 
-#### Weights & Biases Setup
-Create a `.env` file in the root directory with the following content:
+Create a `.env` file in the root directory:
 ```
 WANDB_API_KEY=your_wandb_api_key
 ```
 
-### Examples
+---
 
-**1. Integrated Training (CLIP + VQ-VAE)**
+## 🏋️ Training
+
+#### 🌐 Multiverse (Full Model)
+
+Trains with the game-general loss (`gen`). Runs over seeds 0–9.
+
 ```bash
-./run_docker.sh python train.py exp_name=my_experiment n_epochs=300 batch_size=128
+./run_docker.sh python train.py gen_threshold=0.3 loss_weights.base=0.0 loss_weights.gen=1.0 tsne_interval=200 render_interval=200 vit_eval_freq=200
 ```
 
-**2. CLIP Only Training**
+#### 🔩 Single-positive Contrastive Learning (Baseline)
+
+Trains with the base loss only. Runs over seeds 0–9.
+
 ```bash
-./run_docker.sh python train_clip.py exp_name=clip_only n_epochs=100 batch_size=128 lr=5e-5
+./run_docker.sh python train.py overwrite=true loss_weights.base=1.0 loss_weights.base=0.0 tsne_interval=200 render_interval=200 vit_eval_freq=200
 ```
 
-**3. VQ-VAE Only Training**
+
+#### 📝 Text-Blend Evaluation
+
+Evaluates cross-game level blending guided by compositional text prompts using a trained checkpoint.
 ```bash
-./run_docker.sh python train_cvae.py exp_name=cvae_only n_epochs=100 batch_size=512 lr=2e-4
+./run_docker.sh python eval_textblend.py seed=0 \
+  checkpoint_path="saves/e2e_exp-def_clipdr-0.1_cliptemp-0.14_gen-1.0_s-0/epoch_2000/checkpoints/checkpoint_epoch_2000.pt" \
+  checkpoint_epoch=2000
 ```
 
-**4. Specify GPU**
-```bash
-GPU=2 ./run_docker.sh python train.py exp_name=my_experiment
-```
+---
 
-**5. Select Games**
-```bash
-./run_docker.sh python train.py games=smb_tloz_lr_dg
-```
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
 

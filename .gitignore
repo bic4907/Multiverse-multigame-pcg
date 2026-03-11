@@ -33,4 +33,5 @@ pcgrl_buffer
 .env
 dataset
 vision_level_gpt.zip
-human_dataset*
+human_dataset*# dataset split archives (tracked despite gitignore)
+!dataset/dataset.tar.xz.*
