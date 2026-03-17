@@ -25,11 +25,11 @@ The dataset consists of human-authored game levels collected from two sources:
 
 | Game | Annotations |
 |---|--:|
-| 🍄 Super Mario Bros | 1,241 |
-| 🗡️ The Legend of Zelda | 1,837 |
-| 🏃 Lode Runner | 1,201 |
-| 🏰 Dungeon | 1,298 |
-| **Total** | **5,577** |
+| 🍄 Super Mario Bros | 1,240 |
+| 🗡️ The Legend of Zelda | 1,836 |
+| 🏃 Lode Runner | 1,200 |
+| 🏰 Dungeon | 1,300 |
+| **Total** | **5,576** |
 
 The dataset is split into two archive parts due to GitHub file size limits. To set up the dataset, run:
 
