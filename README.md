@@ -31,6 +31,15 @@ The dataset consists of human-authored game levels collected from two sources:
 | 🏰 Dungeon | 1,300 |
 | **Total** | **5,576** |
 
+### Example Levels
+
+| Game | Level | Instruction |
+|---|---|---|
+| 🍄 Super Mario Bros | <img src="images/super_mario_bros.png" width="200"/> | flat ground with pipe right and question blocks above center |
+| 🗡️ The Legend of Zelda | <img src="images/the_legend_of_zelda.png" width="200"/> | spiral wall corridors around central floor with water pockets |
+| 🏃 Lode Runner | <img src="images/lode_runner.png" width="200"/> | ground platforms top and mid ladders left and center rope top gold right |
+| 🏰 Dungeon | <img src="images/dungeon.png" width="200"/> | scattered walls forming winding paths with bats in open areas |
+
 The dataset is split into two archive parts due to GitHub file size limits. To set up the dataset, run:
 
 ```bash
