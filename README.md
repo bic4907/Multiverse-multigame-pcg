@@ -15,55 +15,29 @@ Key highlights:
 
 Unlike prior text-to-level generators limited to a single game domain, Multiverse learns a **shared representation** that captures structural relationships across game domains, enabling controllable blending through latent interpolation.
 
+| Compositional Text Blending | Embedding Interpolation Blending |
+|:---:|:---:|
+| <img src="images/text_blending_demo.gif" alt="Text Blending Demo" width="400"> | <img src="images/embedding_blending_demo.gif" alt="Embedding Blending Demo" width="400"> |
+
 ---
 
 ## 📦 Dataset
 
-The dataset consists of human-authored game levels collected from two sources:
-- **[VGLC](https://github.com/TheVGLC/TheVGLC) (Video Game Level Corpus)** — a public corpus of human-designed game levels across multiple game domains
-- **PCGRL environment** — human-authored levels used as training references
+**5,576** annotated levels from human-authored game levels, collected from [VGLC](https://github.com/TheVGLC/TheVGLC) and [PCGRL](https://github.com/amidos2006/gym-pcgrl) environments.
 
-| Game | Annotations |
-|---|--:|
-| 🍄 Super Mario Bros | 1,240 |
-| 🗡️ The Legend of Zelda | 1,836 |
-| 🏃 Lode Runner | 1,200 |
-| 🏰 Dungeon | 1,300 |
-| **Total** | **5,576** |
-
-### Example Levels
-
-| Game | 🍄 Super Mario Bros | 🗡️ The Legend of Zelda | 🏃 Lode Runner | 🏰 Dungeon |
+| | 🍄 Super Mario Bros | 🗡️ The Legend of Zelda | 🏃 Lode Runner | 🏰 Dungeon |
 |:---:|:---:|:---:|:---:|:---:|
 | **Level** | <img src="images/super_mario_bros.png" width="200"/> | <img src="images/the_legend_of_zelda.png" width="200"/> | <img src="images/lode_runner.png" width="190"/> | <img src="images/dungeon.png" width="200"/> |
 | **Instruction** | flat ground with pipe right and question blocks above center | spiral wall corridors around central floor with water pockets | ground platforms top and mid ladders left and center rope top gold right | scattered walls forming winding paths with bats in open areas |
+| **Annotations** | 1,240 | 1,836 | 1,200 | 1,300 |
 
-The dataset is split into two archive parts due to GitHub file size limits. To set up the dataset, run:
+To set up the dataset:
 
 ```bash
 bash setup_dataset.sh
 ```
 
-This will reassemble and extract the dataset into the `dataset/` directory.
 
-```
-dataset/
-├── raw_levels/          # Original human-authored level files
-│   ├── super_mario_bros/
-│   ├── the_legend_of_zelda/
-│   ├── lode_runner/
-│   └── dungeon/
-├── processed_levels/    # Preprocessed level patches (.npy) with annotations
-│   ├── super_mario_bros/size_16/
-│   ├── the_legend_of_zelda/size_16/
-│   ├── lode_runner/size_16/
-│   └── dungeon/size_16/
-└── rendered_levels/     # Rendered level images
-    ├── super_mario_bros/size_16/
-    ├── the_legend_of_zelda/size_16/
-    ├── lode_runner/size_16/
-    └── dungeon/size_16/
-```
 
 ---
 
