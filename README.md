@@ -31,7 +31,7 @@ Unlike prior text-to-level generators limited to a single game domain, Multivers
 | **Instruction** | flat ground with pipe right and question blocks above center | spiral wall corridors around central floor with water pockets | ground platforms top and mid ladders left and center rope top gold right | scattered walls forming winding paths with bats in open areas |
 | **Annotations** | 1,240 | 1,836 | 1,200 | 1,300 |
 
-The dataset includes the original instructions ([`annotation.csv`](./instruct/annotation.csv)), a generalized version of instructions ([`generalized_annotation.csv`](./instruct/generalized_annotation.csv)), and a blended version combining instructions from two different games ([`blended_instruction.csv`](./instruct/blended_instruction.csv)).
+The dataset includes the original instructions ([`annotation.csv`](./instruct/annotation.csv)), a generalized version ([`generalized_annotation.csv`](./instruct/generalized_annotation.csv)), and a blended version combining instructions from two different games ([`blended_instruction.csv`](./instruct/blended_instruction.csv)).
 
 To set up the dataset:
 
