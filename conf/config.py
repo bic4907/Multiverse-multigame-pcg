@@ -19,7 +19,7 @@ class Config:
     use_wandb: bool = True
     wandb_id: Optional[str] = None
     wandb_project: Optional[str] = None
-    wandb_entity: Optional[str] = 'st4889ha-gwangju-institute-of-science-and-technology'
+    wandb_entity: Optional[str] = 'anonymous'
     wandb_resume: str = 'allow'
     wandb_key: Optional[str] = None
 
